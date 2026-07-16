@@ -7,6 +7,8 @@ a competitor of linkOS, with a Debian-style UI instead of an Ubuntu-style UI.
 
 > [!WARNING]
 > *install [nodejs](https://nodejs.org/en/download) first, as it is essential.*
+
+Run the following commands to build.
 ```
 git clone https://github.com/aeryli/lonkOS.git
 cd lonkOS
