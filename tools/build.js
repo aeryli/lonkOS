@@ -36,8 +36,8 @@ const data = {
     lastExport: ""
 };
 getFile("notes.txt", data.files);
-getDir("home", data.files)
-console.log(String(getHTML()));
+getDir("home", data.files);
+
 function getFile(locaten, files) {
     fs.readFile(`./root/${locaten}`, 'utf8', (err, dat) => {
         if (err) {
@@ -64,11 +64,18 @@ function getDir(locaten, files) {
 };
 
 function getHTML() {
-    fs.readFile("./LonkOS.html", (err, dat) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        return dat;
-    });
+    return fs.readFileSync("./LonkOS.html");
 };
+
+function buildFile(filePath, mimeType) {
+    let fileBuffer = fs.readFileSync(filePath);
+    let base64String = fileBuffer.toString('base64').replace(/\s/g, '');
+    return `data:${mimeType};base64,${base64String}`;
+}
+
+fs.writeFile('./builds/LonkOS.url', buildFile('./LonkOS.html', 'text/html'), err => {
+    if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.URL)`) }
+});
+fs.writeFile('./builds/LonkOS.html', getHTML(), err => {
+    if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.html)`) }
+});
