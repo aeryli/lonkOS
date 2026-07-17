@@ -9,11 +9,15 @@ Run the following commands.
     > ```
     >     winget install nodejs
     >     node -v
+    >     npm install linkedom
+    >     npm install ws
     > ```
     > </details><details><summary>Linux</summary>
     > ```
     >     sudo apt install nodejs
     >     node -v
+    >     npm install linkedom
+    >     npm install ws
     > ```
     > </details>
 </details><details><summary>build</summary>
