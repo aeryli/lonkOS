@@ -2,15 +2,28 @@
 a competitor of linkOS, with a Debian-style UI instead of an Ubuntu-style UI.
 
 ## building
-> [!NOTE]
-> *building does not currently add css, and is therefore broken.*
+Run the following commands.
 
-> [!WARNING]
-> *install [nodejs](https://nodejs.org/en/download) first, as it is essential.*
-
-Run the following commands to build.
-```
-git clone https://github.com/aeryli/lonkOS.git
-cd lonkOS
-npm run build
-```
+<details><summary>dependencies</summary>
+    > <details><summary>Windows</summary>
+    > ```
+    >     winget install nodejs
+    >     node -v
+    > ```
+    > </details><details><summary>Linux</summary>
+    > ```
+    >     sudo apt install nodejs
+    >     node -v
+    > ```
+    > </details>
+</details><details><summary>build</summary>
+    ```
+        git clone https://github.com/aeryli/lonkOS.git
+        cd lonkOS
+        npm run build
+    ```
+</details><details><summary>run</summary>
+    ```
+        cd builds
+    ```
+</details>

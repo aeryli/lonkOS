@@ -1,5 +1,12 @@
 {
+  "name": "lonkOS",
+  "version": "0.1.5",
   "scripts": {
-    "build": "node tools/build.js"
+    "build": "node tools/build.js",
+    "store": "node tools/store.js"
+  },
+  "dependencies": {
+    "linkedom": "^0.18.13",
+    "ws": "^8.21.1"
   }
 }

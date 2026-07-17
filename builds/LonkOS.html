@@ -2,10 +2,460 @@
 <html>
     <head>
         <title>LonkOS</title>
-        <link rel="stylesheet" href="style.css">
+        <style>    :root {
+      color-scheme: dark;
+      --bg: #241f31;
+      --panel: #2b2936;
+      --text: #f4f1f7;
+      --muted: #b8b2c4;
+      --line: #4a4458;
+      --accent: #e95420;
+      --danger: #c01c28;
+      --ok: #33d17a;
+      --shadow: 0 20px 54px rgba(0, 0, 0, .28);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background: #241f31;
+      color: var(--text);
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #3b3648;
+      color: var(--text);
+      border-radius: 7px;
+      min-height: 34px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus-visible {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    textarea,
+    input {
+      border: 1px solid var(--line);
+      background: rgba(24, 22, 30, .94);
+      color: var(--text);
+      border-radius: 7px;
+    }
+
+    .desktop {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .wallpaper {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, .028) 1px, transparent 1px),
+        linear-gradient(135deg, #241f31 0%, #302a3d 52%, #1d1a24 100%);
+      background-size: 48px 48px, 48px 48px, auto;
+    }
+
+    .topbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 18px;
+      background: rgba(36, 31, 49, .92);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      backdrop-filter: blur(14px);
+      z-index: 30;
+    }
+    /* The main container locked to the bottom */
+    #lowerbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: space-around;
+      z-index: 1000; /* Keeps it on top of other content */
+    }
+    /* The main container locked to the bottom */
+    #leftc {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 30%;
+      height: 60px;
+      color: #cacaca;
+      margin-left: 3%;
+      display: flex;
+      gap: 15px; 
+      flex-direction: row;
+      justify-content: left;
+      align-items: center;
+      z-index: 1000; /* Keeps it on top of other content */
+    }
+    #rightc {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 30%;
+      height: 60px;
+      color: #cacaca;
+      margin-right: 3%;
+      gap: 15px; 
+      display: flex;
+      flex-direction: row;
+      justify-content: right;
+      align-items: center;
+      z-index: 1000; /* Keeps it on top of other content */
+    }
+
+    .window {
+      position: absolute;
+      min-width: 260px;
+      min-height: 180px;
+      background: rgba(43, 41, 54, .97);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(18px);
+    }
+
+    .window[data-focused="true"] {
+      border-color: rgba(233, 84, 32, .78);
+    }
+
+    .resize-handle {
+      position: absolute;
+      z-index: 2;
+      user-select: none;
+    }
+
+    .resize-n,
+    .resize-s {
+      left: 10px;
+      right: 10px;
+      height: 8px;
+      cursor: ns-resize;
+    }
+
+    .resize-n {
+      top: 0;
+    }
+
+    .resize-s {
+      bottom: 0;
+    }
+
+    .resize-e,
+    .resize-w {
+      top: 10px;
+      bottom: 10px;
+      width: 8px;
+      cursor: ew-resize;
+    }
+
+    .resize-e {
+      right: 0;
+    }
+
+    .resize-w {
+      left: 0;
+    }
+
+    .resize-ne,
+    .resize-nw,
+    .resize-se,
+    .resize-sw {
+      width: 14px;
+      height: 14px;
+    }
+
+    .resize-ne,
+    .resize-sw {
+      cursor: nesw-resize;
+    }
+
+    .resize-nw,
+    .resize-se {
+      cursor: nwse-resize;
+    }
+
+    .resize-ne {
+      top: 0;
+      right: 0;
+    }
+
+    .resize-nw {
+      top: 0;
+      left: 0;
+    }
+
+    .resize-se {
+      right: 0;
+      bottom: 0;
+    }
+
+    .resize-sw {
+      left: 0;
+      bottom: 0;
+    }
+
+    .titlebar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 10px 0 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      background: rgba(255, 255, 255, .055);
+      cursor: grab;
+      user-select: none;
+    }
+
+    .title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .lights {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .light {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 0;
+      min-height: 0;
+      padding: 0;
+    }
+
+    .light.close {
+      background: var(--danger);
+    }
+
+    .light.min {
+      background: #f6d32d;
+    }
+
+    .light.max {
+      background: var(--ok);
+    }
+
+    .content {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar button {
+      width: 48px;
+      min-height: 42px;
+      height: 42px;
+      padding: 0 4px;
+      font-size: 10px;
+      line-height: 1.1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        overflow: auto;
+      }
+
+      .desktop {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+      }
+
+      .topbar {
+        position: sticky;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 52px;
+        padding: 8px 10px;
+      }
+
+      .status-line {
+        order: 3;
+        width: 100%;
+      }
+
+      .top-actions {
+        gap: 6px;
+      }
+
+      .workspace {
+        position: relative;
+        inset: auto;
+        display: grid;
+        gap: 12px;
+        padding: 12px;
+        padding-bottom: 54px;
+      }
+
+      .window {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        height: min(480px, 72vh) !important;
+      }
+
+      .dock {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: auto;
+        bottom: 0;
+        width: auto;
+        height: 44px;
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 0 10px;
+      }
+    }
+</style>
     </head>
     <body class="desktop wallpaper">
-
+        <div id="windows"><article style="left:520px;top:468px;width:560px;height:320px;z-index:1" data-focused="true" data-app="App Store" class="window">
+        <header class="titlebar">
+            <span class="title">App Store</span>
+            <div class="lights">
+                <button class="light close" title="Close" aria-label="Close"></button>
+                <button class="light min" title="Minimize" aria-label="Minimize"></button>
+                <button class="light max" title="Maximize" aria-label="Maximize"></button>
+            </div>
+        </header>
+        <section class="content"></section>
+        <span class="resize-handle resize-n"></span>
+        <span class="resize-handle resize-e"></span>
+        <span class="resize-handle resize-s"></span>
+        <span class="resize-handle resize-w"></span>
+        <span class="resize-handle resize-ne"></span>
+        <span class="resize-handle resize-nw"></span>
+        <span class="resize-handle resize-se"></span>
+        <span class="resize-handle resize-sw"></span>
+    </article><article style="left:520px;top:468px;width:560px;height:320px;z-index:1" data-focused="true" data-app="browser" class="window">
+        <header class="titlebar">
+            <span class="title">browser</span>
+            <div class="lights">
+                <button class="light close" title="Close" aria-label="Close"></button>
+                <button class="light min" title="Minimize" aria-label="Minimize"></button>
+                <button class="light max" title="Maximize" aria-label="Maximize"></button>
+            </div>
+        </header>
+        <section class="content"></section>
+        <span class="resize-handle resize-n"></span>
+        <span class="resize-handle resize-e"></span>
+        <span class="resize-handle resize-s"></span>
+        <span class="resize-handle resize-w"></span>
+        <span class="resize-handle resize-ne"></span>
+        <span class="resize-handle resize-nw"></span>
+        <span class="resize-handle resize-se"></span>
+        <span class="resize-handle resize-sw"></span>
+    </article><article style="left:24px;top:408px;width:470px;height:310px;z-index:1" data-focused="true" data-app="Filesystem" class="window">
+        <header class="titlebar">
+            <span class="title">Filesystem</span>
+            <div class="lights">
+                <button class="light close" title="Close" aria-label="Close"></button>
+                <button class="light min" title="Minimize" aria-label="Minimize"></button>
+                <button class="light max" title="Maximize" aria-label="Maximize"></button>
+            </div>
+        </header>
+        <section class="content"></section>
+        <span class="resize-handle resize-n"></span>
+        <span class="resize-handle resize-e"></span>
+        <span class="resize-handle resize-s"></span>
+        <span class="resize-handle resize-w"></span>
+        <span class="resize-handle resize-ne"></span>
+        <span class="resize-handle resize-nw"></span>
+        <span class="resize-handle resize-se"></span>
+        <span class="resize-handle resize-sw"></span>
+    </article><article style="left:620px;top:24px;width:560px;height:420px;z-index:1" data-focused="true" data-app="Editor" class="window">
+        <header class="titlebar">
+            <span class="title">Editor</span>
+            <div class="lights">
+                <button class="light close" title="Close" aria-label="Close"></button>
+                <button class="light min" title="Minimize" aria-label="Minimize"></button>
+                <button class="light max" title="Maximize" aria-label="Maximize"></button>
+            </div>
+        </header>
+        <section class="content"></section>
+        <span class="resize-handle resize-n"></span>
+        <span class="resize-handle resize-e"></span>
+        <span class="resize-handle resize-s"></span>
+        <span class="resize-handle resize-w"></span>
+        <span class="resize-handle resize-ne"></span>
+        <span class="resize-handle resize-nw"></span>
+        <span class="resize-handle resize-se"></span>
+        <span class="resize-handle resize-sw"></span>
+    </article><article style="left:24px;top:24px;width:570px;height:360px;z-index:1" data-focused="true" data-app="Console" class="window">
+        <header class="titlebar">
+            <span class="title">Console</span>
+            <div class="lights">
+                <button class="light close" title="Close" aria-label="Close"></button>
+                <button class="light min" title="Minimize" aria-label="Minimize"></button>
+                <button class="light max" title="Maximize" aria-label="Maximize"></button>
+            </div>
+        </header>
+        <section class="content"></section>
+        <span class="resize-handle resize-n"></span>
+        <span class="resize-handle resize-e"></span>
+        <span class="resize-handle resize-s"></span>
+        <span class="resize-handle resize-w"></span>
+        <span class="resize-handle resize-ne"></span>
+        <span class="resize-handle resize-nw"></span>
+        <span class="resize-handle resize-se"></span>
+        <span class="resize-handle resize-sw"></span>
+    </article></div>
         <div class="topbar">
             <div id="leftc"></div>
             <div id="rightc">hi</div>
