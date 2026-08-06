@@ -40,7 +40,12 @@ jobs:
           fi
           
       - name: Build project
-        run: npm run build -- env.RELEASE_NAME
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            npm run build -- `${ github.event.inputs.release_name }`
+          else
+            npm run build -- `${ github.ref_name }`
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
