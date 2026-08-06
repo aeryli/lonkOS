@@ -3,10 +3,12 @@
   "version": "0.1.5",
   "scripts": {
     "build": "node tools/build.js",
-    "store": "node tools/store.js"
+    "store": "node tools/store.js",
+    "launcher": "node tools/launcher.js"
   },
   "dependencies": {
     "linkedom": "^0.18.13",
+    "open": "^11.0.0",
     "ws": "^8.21.1"
   }
 }
