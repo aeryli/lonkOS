@@ -46,6 +46,10 @@ jobs:
           else
             npm run build -- `${ github.ref_name }`
           fi
+      - name: Rename Outputs
+        run: |
+          mv ./builds/LonkOS.html ./builds/LonkOS-${{ env.RELEASE_NAME }}.html
+          mv ./builds/LonkOS.url ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
