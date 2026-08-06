@@ -1,0 +1,99 @@
+name: Continuous Build
+on:
+  push:
+    paths-ignore:
+    - 'README.md'
+    - '.github/workflows/cbuild.yml'
+    - '.github/workflows/build.yml'
+  pull_request:
+    paths-ignore:
+    - 'README.md'
+permissions:
+  contents: write
+  packages: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - os: web
+            arch: html
+            artifact: LonkOS.html
+          - os: web
+            arch: url
+            artifact: LonkOS.url
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+  
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set Release Name
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "RELEASE_NAME=${{ github.event.inputs.release_name }}" >> $GITHUB_ENV
+          else
+            echo "RELEASE_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+          
+      - name: Build project
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            npm run build -- `${ github.event.inputs.release_name }`
+          else
+            npm run build -- `${ github.ref_name }`
+          fi
+      - name: Rename Outputs
+        run: |
+          mv ./builds/LonkOS.html ./builds/LonkOS-${{ env.RELEASE_NAME }}.html
+          mv ./builds/LonkOS.url ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
+          
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform.os }} ${{ matrix.platform.arch }}
+          path: ${{ matrix.platform.artifact }}
+  
+      - name: Upload Continuous Release
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'vanilla-wiiu/vanilla' }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -fLOSs --retry 2 --retry-delay 60 https://github.com/probonopd/uploadtool/raw/master/upload.sh
+          bash upload.sh ${{ matrix.platform.artifact }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: LonkOS ${{ env.RELEASE_NAME }}
+          files: |
+            ./builds/LonkOS-${{ env.RELEASE_NAME }}.html
+            ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Continuous build
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_NAME }}
+          files: |
+            ./builds/LonkOS-${{ env.RELEASE_NAME }}.html
+            ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
+          body: ""
+          prerelease: false
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  
