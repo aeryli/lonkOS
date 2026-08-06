@@ -1,30 +1,37 @@
 name: Build
+
 on:
-    push:
-    workflow_dispatch:
+  push:
+    tags:
+      - 'v*' # Triggers the workflow when you push a tag starting with 'v' (e.g., v1.0.0)
+
 permissions:
-    statuses: write
-    contents: read
+  contents: write # Required permission to create a GitHub Release
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout Source Code
+        uses: actions/checkout@v7
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: Setup Node.js Environment
+        uses: actions/actions/setup-node@v7
+        with:
+          node-version: 22 # Specifies your project's Node version
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install Project Dependencies
+        run: npm ci # Performs a clean, automated install of package-lock.json
 
-    - name: Run build script
-      run: npm run build
+      - name: Run Build Script
+        run: npm run build # Generates the production bundle (typically in a 'dist' or 'build' folder)
 
-    
-    
+      - name: Package Build Artifacts
+        run: zip -r release-assets.zip builds # Compresses your production folder (change 'dist' if yours is named 'build')
+
+      - name: Generate GitHub Release
+        run: gh release create ${{ github.ref_name }} release-assets.zip --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Built-in token authenticated with 'write' permissions
