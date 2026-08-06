@@ -126,10 +126,10 @@ function buildFile() {
 function buildLonkOS() {
     const args = process.argv.slice(2)[1];
     fs.writeFile(`./builds/LonkOS-${args}.html`, buildFile(), err => {
-        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.html)`) }
+        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS-${args}.html)`) }
     });
     fs.writeFile(`./builds/LonkOS-${args}.url`, buildURL('./builds/LonkOS.html', 'text/html'), err => {
-        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.URL)`) }
+        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS-${args}.URL)`) }
     });
     
     console.log(`LonkOS is still in development.`);
