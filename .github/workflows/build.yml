@@ -30,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
-        run: npm run build
-
       - name: Set Release Name
         id: vars
         run: |
@@ -41,6 +38,9 @@ jobs:
           else
             echo "RELEASE_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
+          
+      - name: Build project
+        run: npm run build -- env.RELEASE_NAME
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
