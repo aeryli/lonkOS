@@ -1,6 +1,6 @@
 # lonkOS
 a semi-fork of linkOS, with a Debian-style UI instead of an Ubuntu-style UI.<br>
-Demo [Here](/builds/LonkOS).
+Demo [Here](/LonkOS).
 
 # building
 ## dependencies
