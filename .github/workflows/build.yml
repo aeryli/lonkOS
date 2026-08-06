@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     tags:
-      - 'v*' # Triggers the workflow when you push a tag starting with 'v' (e.g., v1.0.0)
+      - '*' # Triggers the workflow when you push a tag starting with 'v' (e.g., v1.0.0)
 
 permissions:
   contents: write # Required permission to create a GitHub Release
@@ -28,10 +28,16 @@ jobs:
       - name: Run Build Script
         run: npm run build # Generates the production bundle (typically in a 'dist' or 'build' folder)
 
-      - name: Package Build Artifacts
-        run: zip -r release-assets.zip builds # Compresses your production folder (change 'dist' if yours is named 'build')
-
-      - name: Generate GitHub Release
-        run: gh release create ${{ github.ref_name }} release-assets.zip --generate-notes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Built-in token authenticated with 'write' permissions
+      - name: make release
+        id: make_release
+        uses: softprops/action-gh-release@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref }}
+          name: LonkOS ${{ github.ref_name }}
+          draft: true
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            LonkOS.url
+            LonkOS.html
