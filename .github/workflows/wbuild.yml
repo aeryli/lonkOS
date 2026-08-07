@@ -2,12 +2,6 @@ name: Web Build
 
 on:
   push:
-    paths-ignore:
-    - 'README.md'
-    - '.github/workflows/cbuild.yml'
-    - '.github/workflows/wbuild.yml'
-    - '.github/workflows/build.yml'
-
     tags:
       - '*'
   pull_request:
