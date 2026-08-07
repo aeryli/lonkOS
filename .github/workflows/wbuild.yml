@@ -42,18 +42,10 @@ jobs:
           else
             npm run build -- `${ github.ref_name }`
           fi
-
-      - name: Rename Outputs
-        run: |
-          mv ./builds/LonkOS.html ./builds/LonkOS-${{ env.RELEASE_NAME }}.html
-          mv ./builds/LonkOS.url ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
-          
-
       - name: upload web files
         run: |
-          mkdir -p path/to/target-folder
           git config user.name "noaeryli"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ./builds/LonkOS-${{ env.RELEASE_NAME }}.html ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
+          git add ./builds/LonkOS.html ./builds/LonkOS.url
           git commit -m "upload files for web build"
           git push
