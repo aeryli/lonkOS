@@ -14,7 +14,7 @@ on:
     - '.github/workflows/wbuild.yml'
     - '.github/workflows/build.yml'
 jobs:
-  build:
+  continuous-build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
