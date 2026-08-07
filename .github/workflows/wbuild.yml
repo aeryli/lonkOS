@@ -49,12 +49,11 @@ jobs:
           mv ./builds/LonkOS.url ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
           
 
-      - name: Move files and commit to repository
+      - name: upload web files
         run: |
           mkdir -p path/to/target-folder
-          mv file1.ext file2.ext path/to/target-folder/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add path/to/target-folder/file1.ext path/to/target-folder/file2.ext
-          git commit -m "chore: upload files to target folder [skip ci]"
+          git add ./builds/LonkOS-${{ env.RELEASE_NAME }}.html ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
+          git commit -m "upload files for web build"
           git push
