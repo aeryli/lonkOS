@@ -1,1 +1,2 @@
 LonkOS is still in development.
+You may experience bugs.
