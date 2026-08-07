@@ -124,25 +124,14 @@ function buildFile() {
 };
 
 function buildLonkOS() {
-    const args = process.argv.slice(2)[1];
+    
     fs.writeFile(`./builds/LonkOS.html`, buildFile(), err => {
-        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.html)`) }
+        if (err) { console.error(err); } else { console.log(`Wrote HTML File (Builds/LonkOS.html)`) }
     });
     fs.writeFile(`./builds/LonkOS.url`, buildURL(`./builds/LonkOS.html`, 'text/html'), err => {
         if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.URL)`) }
     });
-    
-    console.log(`LonkOS is still in development.`);
-};
-
-function buildLonkOSt() {
     const args = process.argv.slice(2)[1];
-    fs.writeFile(`./builds/LonkOS-${args}.html`, buildFile(), err => {
-        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS-${args}.html)`) }
-    });
-    fs.writeFile(`./builds/LonkOS-${args}.url`, buildURL(`./builds/LonkOS-${args}.html`, 'text/html'), err => {
-        if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS-${args}.URL)`) }
-    });
-    
+    if (!(args="")) { console.log(args) };
     console.log(`LonkOS is still in development.`);
 };
