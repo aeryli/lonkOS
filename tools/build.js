@@ -7,6 +7,7 @@ const release = {
     name: "lonkos",
     stylename: "LonkOS"
 }
+
 const data = {
     username: "user",
     files: {
@@ -38,8 +39,10 @@ const data = {
     },
     lastExport: ""
 };
+
 //getFile("notes.txt", data.files);
 //getDir("home", data.files);
+
 buildLonkOS();
 for (let i in Object.keys(data.files)) {
     let key = Object.keys(data.files)[i];
@@ -56,12 +59,14 @@ function getFile(locaten, files) {
         files[locaten]["in"] = dat;
     });
 };
+
 function getDir(locaten, files) {
     fs.readdir(`./root/${locaten}`, (err, dat) => {
         if (err) { console.error(err);return; };
         files[locaten]["in"] = dat;
     });
 };
+
 function windowsb() {
     let windows = [];
     for (let [name, windat] of Object.entries(data.windows)) {
@@ -71,6 +76,7 @@ function windowsb() {
     }
     return windows;
 }
+
 function windowb(windat, name) {
     let window = document.createElement('article');
     window.className = "window";
@@ -111,6 +117,7 @@ function buildURL(filePath, mimeType) {
     let base64String = fileBuffer.toString('base64').replace(/\s/g, '');
     return `data:${mimeType};base64,${base64String}`;
 }
+
 function buildFile() {
     let html = getHTML().toString();
     let css = getCSS().toString();
@@ -124,7 +131,6 @@ function buildFile() {
 };
 
 function buildLonkOS() {
-    
     fs.writeFile(`./builds/LonkOS.html`, buildFile(), err => {
         if (err) { console.error(err); } else { console.log(`Wrote HTML File (Builds/LonkOS.html)`) }
     });
