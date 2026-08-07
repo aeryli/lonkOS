@@ -1,35 +1,16 @@
 <html>
 <head>
   <title>Simple client</title>
-
   <script type="text/javascript">
-
     var ws;
     
     function init() {
-
-      //Connect
-      ws = new WebSocket("ws://localhost:9001/");
-
-      //connected
-      ws.onopen = function() {
-        output("connected");
-      };
-      //received message
-      ws.onmessage = function(e) {
-        let lastmsg = e.data;
-        output("recieved: " + e.data);
-      };
-      //disconnected
-      ws.onclose = function() {
-        output("disconnected");
-      };
-      //error happened
-      ws.onerror = function(e) {
-        output(`error: ${e.message}`);
-        console.log(e);
-      };
-
+      ws = new WebSocket("ws://localhost:9001/");                                             //Connect
+                                                                                             //Events
+      ws.onopen = function() { output("connected"); };                                      //connected
+      ws.onmessage = function(e) { let lastmsg = e.data; output("recieved: " + e.data); }; //received message
+      ws.onclose = function() { output("disconnected"); };                                //disconnected
+      ws.onerror = function(e) { output(`error: ${e.message}`); console.log(e); };       //error happened
     }
     
     function onSubmit() {
