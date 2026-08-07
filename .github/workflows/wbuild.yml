@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  build:
+  web-build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
