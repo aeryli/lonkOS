@@ -132,6 +132,6 @@ function buildLonkOS() {
         if (err) { console.error(err); } else { console.log(`Wrote URL File (Builds/LonkOS.URL)`) }
     });
     const args = process.argv.slice(2)[1];
-    if (!(args="")) { console.log(args) };
+    if (!(args=="")) { console.log(args) };
     console.log(`LonkOS is still in development.`);
 };
