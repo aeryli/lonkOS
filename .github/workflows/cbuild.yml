@@ -59,6 +59,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "cbld"
+          name: Continuous Build
           files: |
             ./builds/LonkOS-${{ env.RELEASE_NAME }}.html
             ./builds/LonkOS-${{ env.RELEASE_NAME }}.url
