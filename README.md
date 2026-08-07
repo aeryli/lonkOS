@@ -27,5 +27,5 @@ npm run build
 ```
 ## run
 ```
-npm run launcher
+cd builds
 ```
