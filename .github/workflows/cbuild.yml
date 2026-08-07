@@ -8,21 +8,13 @@ on:
   pull_request:
     paths-ignore:
     - 'README.md'
+    - '.github/workflows/cbuild.yml'
+    - '.github/workflows/build.yml'
 permissions:
   contents: write
   packages: write
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - os: web
-            arch: html
-            artifact: LonkOS.html
-          - os: web
-            arch: url
-            artifact: LonkOS.url
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
