@@ -4,11 +4,6 @@ on:
   push:
     tags:
       - '*'
-  pull_request:
-    paths-ignore:
-    - 'README.md'
-    - '.github/workflows/cbuild.yml'
-    - '.github/workflows/build.yml'
 
 jobs:
   build:
